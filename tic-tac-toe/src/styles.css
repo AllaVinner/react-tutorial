@@ -14,5 +14,9 @@
     width: 34px;
 }
 
-
+.board-row::after {
+    clear: both;
+    content: '';
+    display: table;
+}
 

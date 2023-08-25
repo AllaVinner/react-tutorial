@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
+function Square() {
+    return <button className="square">X</button>;
+}
+
 function Game() {
     return (
         <div className="game">
-            Just some intitial text!
+            {Square()}
         </div>
     );
 }

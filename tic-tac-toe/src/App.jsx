@@ -13,24 +13,19 @@ function Square({ value, onSquareClick}) {
     );
 }
 
-function Board() {
-    const [player, setPlayer] = useState('X');
-    const [squares, setSquares] = useState(Array(9).fill(null));
+function Board({player, squares, onPlay}) {
 
-
-    function handleClick(i, player) {
+    function handleClick(i) {
         if (squares[i] || calculateWinner(squares)) {
             return;
         }
         const squares_copy = squares.slice();
         if (player === 'X') {
             squares_copy[i] = 'X';
-            setPlayer('O')
         } else if (player === 'O') {
             squares_copy[i] = 'O';
-            setPlayer('X')
         }
-        setSquares(squares_copy);
+        onPlay(squares_copy)
     }
 
 
@@ -66,9 +61,71 @@ function Board() {
 
 
 function Game() {
+
+    const [player, setPlayer] = useState('X');
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [currentMove, setCurrentMove] = useState(0);
+    const currentSquares = history[currentMove];
+
+    function handlePlay(nextSquares) {
+        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length - 1);
+        let nextPlayer;
+        switch (player) {
+            case 'X':
+                nextPlayer = 'O';
+                break;
+            case 'O':
+                nextPlayer = 'X';
+                break;
+            default:
+                nextPlayer = 'X';
+        }
+        setPlayer(nextPlayer);
+    }
+    function jumpTo(nextMove) {
+        setCurrentMove(nextMove);
+        let nextPlayer;
+        switch (nextMove % 2) {
+            case 0:
+                nextPlayer = 'X';
+                break;
+            case 1:
+                nextPlayer = 'O';
+                break;
+            default:
+                nextPlayer = 'X';
+        }
+        setPlayer(nextPlayer);
+    }   
+
+    const moves = history.map((squares, move) => {
+        let description;
+        if (move > 0) {
+            description = 'Go to move #' + move;
+        } else {
+            description = 'Go to game start';
+        }
+        return (
+            <li key={move}>
+                <button onClick={() => jumpTo(move)}>{description}</button>
+            </li>
+        );
+    });
+
+
+
     return (
-        <div className="game">
-            <Board />
+        <div className='game'>
+            <div className="game-board">
+                <Board player={player} squares={currentSquares} onPlay={handlePlay} />
+            </div>
+            <div className='game-info'> 
+                <ol>
+                    {moves}
+                </ol>
+            </div>    
         </div>
     );
 }

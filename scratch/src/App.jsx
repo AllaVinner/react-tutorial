@@ -1,37 +1,57 @@
 import { useState } from 'react'
 
-function Increase({handleClick}) {
-  console.log('Run INcrease')
+
+function Square({ value, onSquareClick }) {
+
   return (
-    <>
-      <button onClick={handleClick}> Click me </button>
-    </>
+    <button
+      className="square"
+      onClick={onSquareClick}
+    >
+      {value}
+    </button>
   );
 }
 
+function Row({array}) {
+
+  return <ul>
+    {array.map((v) => <Square value={v} onSquareClick={(e) => (1)} />) }
+  </ul>
+}
+
+
+function Matrix({array}) {
+  return (
+    <>
+      <Row array={array} />
+      <Row array={array} />
+    </>
+  )
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [val, setVal] = useState(0)
   console.log('Run App')
+  const [arr, setArr] = useState( Array(7).fill(0).map((v, i) => i))
 
-  let double;
-  let tripple;
-  function addOneCount() {
-    console.log('Add One')
-    setCount(count + 1)
+  const handleSubmit = (e) => {
+    console.log('Handle submit')
+    const num = parseInt(e.target.value)
+    if (num) {
+      setArr(Array(parseInt(e.target.value)).fill(0).map((v, i) => i))
+    }
+    setVal(e.target.value)
   }
 
-  double = 2 * count;
-  tripple = 3 * count;
+
   return (  
     <>
       <div>
         Hello Scratch
-        <Increase handleClick={addOneCount} />
-        <Increase handleClick={addOneCount} />
-        <div>{count} </div>
-        <div>{double} </div>
-        <div>{tripple} </div>
+        <input type="number" onChange={(e) => handleSubmit(e)}/>
+        <div> Number {val} </div>
+        <Matrix array={arr} />
       </div>
     </>
   )

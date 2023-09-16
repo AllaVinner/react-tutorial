@@ -21,27 +21,37 @@ function Row({array}) {
 }
 
 
-function Matrix({array}) {
+function Matrix({ array }) {
+  
   return (
     <>
-      <Row array={array} />
-      <Row array={array} />
+      {array.map((v) => <Row array={v} />)}
     </>
   )
 }
 
 function App() {
-  const [val, setVal] = useState(0)
+  const [numRow, setRow] = useState(0)
+  const [numCol, setCol] = useState(0)
   console.log('Run App')
-  const [arr, setArr] = useState( Array(7).fill(0).map((v, i) => i))
+  const [arr, setArr] = useState( Array(3).fill(Array(7).fill('x')))
 
-  const handleSubmit = (e) => {
+  const handleRowSubmit = (e) => {
     console.log('Handle submit')
     const num = parseInt(e.target.value)
     if (num) {
-      setArr(Array(parseInt(e.target.value)).fill(0).map((v, i) => i))
+      setArr(Array(num).fill(Array(numCol).fill('x')))
     }
-    setVal(e.target.value)
+    setRow(num)
+  }
+
+  const handleColSubmit = (e) => {
+    console.log('Handle Col submit')
+    const num = parseInt(e.target.value)
+    if (num) {
+      setArr(Array(numRow).fill(Array(num).fill('x')))
+    }
+    setCol(num)
   }
 
 
@@ -49,8 +59,9 @@ function App() {
     <>
       <div>
         Hello Scratch
-        <input type="number" onChange={(e) => handleSubmit(e)}/>
-        <div> Number {val} </div>
+        <input type="number" onChange={(e) => handleRowSubmit(e)} />
+        <input type="number" onChange={(e) => handleColSubmit(e)} />
+        <div> Number {numCol} </div>
         <Matrix array={arr} />
       </div>
     </>

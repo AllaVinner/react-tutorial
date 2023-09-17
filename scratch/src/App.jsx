@@ -9,17 +9,16 @@ function Square({ value, onSquareClick }) {
     <button
       className="square"
       onClick={onSquareClick}
-      style={{ height: "20px" }}
     >
       {value ? value: default_value}
     </button>
   );
 }
 
-function Row({array, setCellValue}) {
+function Row({rowNumber, array, setCellValue}) {
 
-  return <ul style={{height: "20px", margin: "0px"}}>
-    {array.map((v, i) => <Square value={v} onSquareClick={(e) => setCellValue(i)} />) }
+  return <ul key={'rowcontainer' + rowNumber} className="row">
+    {array.map((v, i) => <Square key={'row-'+rowNumber+'col-'+i} value={v} onSquareClick={(e) => setCellValue(i)} />) }
   </ul>
 }
 
@@ -28,38 +27,48 @@ function Matrix({ array, setCellValue}) {
   
   return (
     <>
-      {array.map((v, i) => <Row array={v} setCellValue={(col, val) => setCellValue(i, col)} />)}
+      {array.map((v, i) => <Row key={'row-number-' + i} rowNumber={i} array={v} setCellValue={(col, val) => setCellValue(i, col)} />)}
     </>
   )
 }
 
 function App() {
-  const [numRow, setRow] = useState(0)
-  const [numCol, setCol] = useState(0)
+  const [numRow, setRow] = useState(3)
+  const [numCol, setCol] = useState(3)
+  const [numToWin, setNumToWin] = useState(3)
   const [moveNum, setMoveNum] = useState(0)
 
   const players = ['X', 'O']
 
   console.log('Run App')
-  const [arr, setArr] = useState( Array(3).fill(null).map((v) => Array(7).fill(null)))
+  const [arr, setArr] = useState(Array(numRow).fill(null).map((v) => Array(numCol).fill(null)))
 
+  const resetBoard = () => {
+    setArr(Array(numRow).fill(null).map((v) => Array(numCol).fill(null)))
+  }
+  
   const handleRowSubmit = (e) => {
     const num = parseInt(e.target.value)
     if (num) {
       setArr(Array(numCol).fill(null).map((v) => Array(num).fill(null)))
+      setRow(num)
     }
-    setRow(num)
   }
-
 
   const handleColSubmit = (e) => {
     const num = parseInt(e.target.value)
     if (num) {
       setArr(Array(num).fill(null).map((v) => Array(numRow).fill(null)))
+      setCol(num)
     }
-    setCol(num)
   }
 
+  const handleNumToWinSubmit = (e) => {
+    const num = parseInt(e.target.value)
+    if (num) {
+      setNumToWin(num)
+    }
+  }
 
   const setCellValue = (row, col) => {
     if (arr[row][col] != null) {
@@ -67,7 +76,7 @@ function App() {
     }
     var tmp = arr.slice()
     tmp[row][col] = players[moveNum % players.length]
-    if (isWinning(row, col, 3, tmp)) {
+    if (isWinning(row, col, numToWin, tmp)) {
       console.log('WINNING MOVE')
     }
     setArr(tmp)
@@ -76,12 +85,13 @@ function App() {
 
   return (  
     <>
+      <div className='sidebar'>
+        <input type="number" onChange={(e) => handleRowSubmit(e)} value={numRow} />
+        <input type="number" onChange={(e) => handleColSubmit(e)} value={numCol} />
+        <input type="number" onChange={(e) => handleNumToWinSubmit(e)} value={numToWin} />
+        <button  onClick={() => resetBoard()} > Reset </button>
+      </div>
       <div>
-        Hello Scratch
-        <input type="number" onChange={(e) => handleRowSubmit(e)} />
-        <input type="number" onChange={(e) => handleColSubmit(e)} />
-        <button onClick={() => console.log(arr)} />
-        <div> Number {numCol} </div>
         <Matrix array={arr} setCellValue={setCellValue} />
       </div>
     </>

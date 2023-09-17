@@ -1,6 +1,25 @@
+
+.container {
+    display: grid;
+    grid-template-columns: 400px 1fr 400px;
+    grid-template-rows: 100px 1fr 100px;
+    gap: 10px;
+}
+
+.header {
+    grid-column: 1 / span 3;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+    align-items: center;
+    font-size: 130%;
+}
+
 .square {
-    background: #999;
+    background: #F0F0F0;
+    border: 1px solid #1abc9c;
     font-size: 24px;
+    color: #1abc9c;
     line-height: 34px;
     height: 54px;
     margin-right: -1px;
@@ -8,19 +27,43 @@
     padding: 0;
     text-align: center;
     width: 54px;
+    position: relative;
+    vertical-align: top;
 }
 
 .row {
     margin: 0px;
+    padding: 0%;
 }
 
 
 .sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 40px 40px 40px 40px;
+    
+}
+
+.config-label {
+    margin-left: auto;
+    margin-right: 10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    color: #1abc9c;
+}
+
+.board {
+    margin: 0 auto;
     position: relative;
 }
 
-.config {
-    position: absolute;
-    top: 0;
-    right: 0;
+.winnning-header {
+    color: #1abc9c;
+    grid-column: 1 / span 3;
+    text-align: center;
+    align-items: center;
 }
+
+
+

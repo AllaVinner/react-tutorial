@@ -37,6 +37,7 @@ function App() {
   const [numCol, setCol] = useState(3)
   const [numToWin, setNumToWin] = useState(3)
   const [moveNum, setMoveNum] = useState(0)
+  const [winningPlayer, setWinningPlayer] = useState(null)
 
   const players = ['X', 'O']
 
@@ -45,12 +46,13 @@ function App() {
 
   const resetBoard = () => {
     setArr(Array(numRow).fill(null).map((v) => Array(numCol).fill(null)))
+    setWinningPlayer(null)
   }
   
   const handleRowSubmit = (e) => {
     const num = parseInt(e.target.value)
     if (num) {
-      setArr(Array(numCol).fill(null).map((v) => Array(num).fill(null)))
+      setArr(Array(num).fill(null).map((v) => Array(numCol).fill(null)))
       setRow(num)
     }
   }
@@ -58,7 +60,7 @@ function App() {
   const handleColSubmit = (e) => {
     const num = parseInt(e.target.value)
     if (num) {
-      setArr(Array(num).fill(null).map((v) => Array(numRow).fill(null)))
+      setArr(Array(numRow).fill(null).map((v) => Array(num).fill(null)))
       setCol(num)
     }
   }
@@ -77,7 +79,7 @@ function App() {
     var tmp = arr.slice()
     tmp[row][col] = players[moveNum % players.length]
     if (isWinning(row, col, numToWin, tmp)) {
-      console.log('WINNING MOVE')
+      setWinningPlayer(tmp[row][col])
     }
     setArr(tmp)
     setMoveNum(moveNum + 1)
@@ -85,14 +87,26 @@ function App() {
 
   return (  
     <>
-      <div className='sidebar'>
-        <input type="number" onChange={(e) => handleRowSubmit(e)} value={numRow} />
-        <input type="number" onChange={(e) => handleColSubmit(e)} value={numCol} />
-        <input type="number" onChange={(e) => handleNumToWinSubmit(e)} value={numToWin} />
-        <button  onClick={() => resetBoard()} > Reset </button>
+      <div className='container'>
+        <div className='header'>
+          <h1>Tic Toe Tac</h1>
+        </div>
+        <div className='sidebar'>
+          <h3 className='config-label'></h3>
+          <button onClick={() => resetBoard()} >Reset</button>
+          <h3 className='config-label'>Number of Rows: </h3>
+          <input type="number" onChange={(e) => handleRowSubmit(e)} value={numRow} />
+          <h3 className='config-label'>Number of Columns: </h3>
+          <input type="number" onChange={(e) => handleColSubmit(e)} value={numCol} />
+          <h3 className='config-label'>Number to Win: </h3>
+          <input type="number" onChange={(e) => handleNumToWinSubmit(e)} value={numToWin} />
       </div>
-      <div>
+      <div className='board'>
         <Matrix array={arr} setCellValue={setCellValue} />
+        </div>
+        {winningPlayer &&
+          <h2 className='winnning-header'>Player {winningPlayer} Won!</h2>
+        }
       </div>
     </>
   )

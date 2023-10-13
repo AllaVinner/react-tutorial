@@ -1,37 +1,33 @@
 import React, { useState } from "react";
+import "./App.css"
+import PointPicker from "./pointPicker/pointPicker";
+import BoxPicker from "./boxPicker/boxPicker";
+
 
 function App() {
-  const [file, setFile] = useState();
-  function handleChange(e) {
-    console.log(e.target.files);
-    var a = URL.createObjectURL(e.target.files[0]);
-    console.log(a)
-    setFile(a);
-  }
+  let [pointX, setPointX] = useState(0.3)
+  let [pointY, setPointY] = useState(0.3)
+
+  let [minPointX, setMinPointX] = useState(0.3)
+  let [minPointY, setMinPointY] = useState(0.3)
+
+  let [maxPointX, setMaxPointX] = useState(0.3)
+  let [maxPointY, setMaxPointY] = useState(0.3)
 
   return (
     <div className="app">
-      <div className="header">
-        <h1> Header </h1>
+      <div> Hello</div>
+      <div className="board">
+        <div>Hello</div>
+        <BoxPicker pointHeight={10} pointWidth={10} />
+        <PointPicker />
+        <div>Hello</div>
+        <div>Hello</div>
+        <div className="axis">Hello</div>
+        <PointPicker />
+        <div>{pointX}</div>
       </div>
-      <div className="sidebar">
-        <h2>Sidebar</h2>
-        <input className="fileSelector" type="file" onChange={handleChange} />
-        <div className="numRowSelector">
-          <label>
-            Num Rows in 
-          </label>
-          <input type="number" className="numRowButton" />
-        </div>
-      </div>
-      <div className="main">
-        <h2>Main</h2>
-
-        <img src={file} />
-      </div>
-
     </div>
-
   );
 }
 

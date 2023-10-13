@@ -2,48 +2,6 @@
     text-align: center;
     align-items: center;
     margin: 0;
-}
-
-
-.app {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100px 1fr;
-    gap: 10px;
-    background-color:palegoldenrod
-}
-
-.header {
-    grid-column: 1 / span 3;
-    color: white;
-    height: 100%;
-    background-color: midnightblue;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sidebar {
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 10px;
-}
-
-.fileSelector {
-    height: inherit;
-}
-
-.numRowSelector{
-    display: flex;
-    justify-content: center;
-    column-gap: 10px;
-    width: 100%;
-}
-
-
-.main {
-    grid-column: 2;
+    box-sizing: border-box;
 }
 

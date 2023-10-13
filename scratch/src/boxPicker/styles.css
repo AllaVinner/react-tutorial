@@ -1,0 +1,25 @@
+
+.box {
+    background-color: #AAAAAA33;
+}
+
+.box-picker {
+    background-color: gray;
+}
+
+.box-picker>.grid {
+    background-color: rgba(0, 0, 0, 0.345);
+}
+
+.box-picker>.grid>.axis {
+    background-color: beige;
+}
+.box-picker>.grid>.box {
+    background-color: #FFFFFF22;
+}
+
+.box-picker>.grid>.point {
+    background-color: gainsboro;
+    
+}
+

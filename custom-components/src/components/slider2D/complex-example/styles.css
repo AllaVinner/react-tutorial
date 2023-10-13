@@ -1,0 +1,47 @@
+#complex-example-slider-2d {
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.coordinate-container {
+    display: grid;
+    grid-template-columns: 150px 150px;
+    grid-template-rows: 1.5rem 1.5rem;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0px;
+    font-size: 2rem;
+}
+
+/* Component Styles */
+
+.slider-2d {
+    background-color: #00000000;
+}
+
+.slider-2d>.grid {
+    border-radius: 20px;
+}
+
+.slider-2d>.grid {
+    border-radius: 20px;
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg);
+    background-position: 105% 50%;
+    background-size: 150%;
+    background-repeat: no-repeat;
+}
+
+.slider-2d>.grid>.axis {
+    background-color: beige;
+}
+
+.slider-2d>.grid>.box {
+    background-color: #FF885544;
+}
+
+.slider-2d>.grid>.point {
+    background-color: rgb(168, 91, 66);
+}
+

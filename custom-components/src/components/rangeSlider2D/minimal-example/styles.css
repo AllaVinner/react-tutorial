@@ -1,0 +1,21 @@
+#minimal-example-range-slider-2d {
+    display: flex;
+}
+
+/* Component Styles */
+
+.range-slider-2d {
+    background-color: #000000;
+}
+
+.range-slider-2d>.grid>.axis {
+    background-color: beige;
+}
+
+.range-slider-2d>.grid>.box {
+    background-color: #FFFFFF44;
+}
+
+.range-slider-2d>.grid>.point {
+    background-color: gainsboro;
+}

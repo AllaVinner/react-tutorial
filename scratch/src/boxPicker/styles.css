@@ -1,0 +1,32 @@
+
+.box {
+    background-color: #AAAAAA33;
+}
+
+.box-picker {
+    background-color: gray;
+}
+
+.box-picker>.grid {
+    border-radius: 20px;
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg);
+    background-position: 50% 50%;
+    background-size: 20%;
+    background-repeat: no-repeat;
+}
+
+.box-picker>.grid>.axis {
+    background-color: beige;
+}
+.box-picker>.grid>.box {
+    background-color: #FFFFFF22;
+}
+
+.box-picker>.grid>.point {
+    background-color: gainsboro;
+    
+}
+
+
+
+

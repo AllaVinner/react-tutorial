@@ -1,0 +1,19 @@
+.minimal-example-slider-2d{
+    display: flex;
+}
+
+.slider-2d {
+    background-color: gray;
+}
+
+.slider-2d>.grid {
+    background-color: rgba(0, 0, 0, 0.345);
+}
+
+.slider-2d>.grid>.axis {
+    background-color: beige;
+}
+
+.slider-2d>.grid>.point {
+    background-color: aqua;
+}

@@ -37,7 +37,7 @@
     
 }
 
-#config {
+.config {
     width: max(25%, 300px);
     border: 1px solid white;
     background-color: #181818;

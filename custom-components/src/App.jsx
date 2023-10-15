@@ -30,7 +30,7 @@ function App() {
             {seedReal.toFixed(2)} + {seedImag.toFixed(2)}i
           </div>
         </div>
-        <Slider2d setPointX={setSeedReal} setPointY={setSeedImag} gridWidth={250} gridHeight={250} />
+        <Slider2d setPointX={setSeedReal} setPointY={setSeedImag} gridWidth={200} gridHeight={200} />
         <div className='num-display'>
           <label>
             Min Box Value:
@@ -47,7 +47,7 @@ function App() {
             {maxReal.toFixed(2)} + {maxImag.toFixed(2)}i
           </div>
         </div>
-        <RangeSlider2d setPoint1X={setMinReal} setPoint1Y={setMinImag} setPoint2X={setMaxReal} setPoint2Y={setMaxImag} gridWidth={250} gridHeight={250} />
+        <RangeSlider2d setPoint1X={setMinReal} setPoint1Y={setMinImag} setPoint2X={setMaxReal} setPoint2Y={setMaxImag} gridWidth={200} gridHeight={200} />
         <div className='numeric-input'>
           <label>Image Width: </label>
           <input type='numeric' value={300}></input>

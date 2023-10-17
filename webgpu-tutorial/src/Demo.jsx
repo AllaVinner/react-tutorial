@@ -9,7 +9,10 @@ function shuffleArray(array) {
     }
 }
 
-async function init() {
+async function init(vertices) {
+    //let zx = -1.0
+    //let zy = 0.2
+    console.log('rerunning webgpu')
     if (!navigator.gpu) {
         throw Error("WebGPU not supported.");
     }
@@ -26,14 +29,47 @@ async function init() {
         @builtin(position) position : vec4f,
         @location(0) color : vec4f
       }
+
+
+      fn square(z: vec2<f32>) -> f32 {
+        return z.x*z.x+z.y*z.y;
+      }
+     
+      fn c_mul(a:vec2<f32>, b:vec2<f32>) -> vec2<f32>{
+        return vec2<f32>(a.x*b.x-a.y*b.y, a.x*b.y + a.y*b.x);
+      }
+      
+      fn c_conj(z:vec2<f32>) -> vec2<f32>{
+        return vec2<f32>(z.x, -z.y);
+      }
+
+      fn c_abs(z:vec2<f32>) -> f32 {
+        return z.x*z.x+z.y*z.y;
+    }
+
+      fn julia(z_init: vec4<f32>) -> f32 {
+        var counter: f32 = 0;
+        var z = vec2<f32>(z_init.x, z_init.y);
+        var c = vec2<f32>(z_init.z, z_init.w);
+        const max_iter = 100;
+        while c_abs(z) < 4 && counter < max_iter {    
+            // Increment the counter
+            counter = counter + 1;
+            z = c_mul(z, z) + c;
+        };
+        return counter / max_iter;
+      }
+
       
       @vertex
       fn vertex_main(@location(0) position: vec4f) -> VertexOut
       {
-        const pos = vec4f( 0.0,  0.0, 0.0, 0);
+        var pos = vec4f( 0.0,  0.0, 0.0, 0);
         var output : VertexOut;
-        output.position = position;
-        output.color = (position-pos)*(position-pos);
+        var val: f32 = julia(position);
+        output.position = vec4<f32>(position.x, position.y, 0, 1);
+        output.color = vec4<f32>(val, 0, 0, 1);
+        var a = pos.z;
         return output;
       }
     
@@ -42,6 +78,8 @@ async function init() {
     {
         return fragData.color;
     }
+
+    
     `;
 
 
@@ -59,21 +97,7 @@ async function init() {
         alphaMode: "premultiplied",
     });
 
-    const num_vert = 12
-    let vertices = new Float32Array(num_vert*8)
-    let angle = 0;
-    for (let i = 0; i < num_vert; i++) {
-        angle = i/num_vert *2*3.141592;
-        vertices[8*i+0] = Math.cos(angle);
-        vertices[8*i+1] = Math.sin(angle);
-        vertices[8*i+2] = 0.;
-        vertices[8*i+3] = 1.;
-        vertices[8*i+4] = 0.3;
-        vertices[8*i+5] = 0.3;
-        vertices[8*i+6] = 0.3;
-        vertices[8*i+7] = 0.1;
-    }
-    console.log(vertices)
+
 
     const vertexBuffer = device.createBuffer({
     size: vertices.byteLength, // make it big enough to store vertices in
@@ -91,7 +115,7 @@ async function init() {
                 offset: 0,
                 format: "float32x4",
             }],
-            arrayStride: 32,
+            arrayStride: 4*4,
             stepMode: "vertex",
         },
         ];
@@ -112,7 +136,7 @@ async function init() {
         ],
     },
     primitive: {
-        topology: "triangle-list",
+        topology: "point-list",
     },
     layout: "auto",
     };
@@ -136,7 +160,7 @@ async function init() {
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(renderPipeline);
     passEncoder.setVertexBuffer(0, vertexBuffer);
-    passEncoder.draw(num_vert);
+    passEncoder.draw(vertices.length/4);
     passEncoder.end();
 
     device.queue.submit([commandEncoder.finish()]);

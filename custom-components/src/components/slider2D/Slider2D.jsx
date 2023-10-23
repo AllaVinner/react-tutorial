@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 
 function Slider2D(props) {
     // Handle props
+    let pointX = props.pointX ? props.pointX : 0.0;
+    let pointY = props.pointY ? props.pointY : 0.0;
+    
     let setPointX = props.setPointX ? props.setPointX : () => 1;
     let setPointY = props.setPointY ? props.setPointY : () => 1;
+    
     let gridWidth = props.gridWidth ? props.gridWidth : 500;
     let gridHeight = props.gridHeight ? props.gridHeight : 500;
 
@@ -12,17 +17,17 @@ function Slider2D(props) {
     let gridMaxX = props.gridMaxX ? props.gridMaxX : 2.
     let gridMaxY = props.gridMaxY ? props.gridMaxY : 2.
 
-    let pointHeight = props.pointHeight ? props.pointHeight : 20
-    let pointWidth = props.pointWidth ? props.pointWidth : 20
+    let pointRadius = props.pointRadius ? props.pointRadius : 10
     let includeAxis = typeof props.includeAxis == "boolean" ? props.includeAxis : true
     let axisThickness = props.axisThickness ? props.axisThickness : 1
 
-    let initialX = props.initialX ? props.initialX : 0.;
-    let initialY = props.initialY ? props.initialY : 0.;
+    // Create local Variables
+    let [pointLeft, setPointLeft] = useState(centerPoint(xToLeft(pointX)))
+    let [pointTop, setPointTop] = useState(centerPoint(yToTop(pointY)))
 
-    // Setup reactives
-    let [pointLeft, setPointLeft] = useState(xToLeft(initialX) - pointWidth / 2)
-    let [pointTop, setPointTop] = useState(yToTop(initialY) - pointHeight / 2)
+    function centerPoint(pointPosition) {
+        return pointPosition
+    }
 
     function xToLeft(x) {
         return (x - gridMinX) / (gridMaxX - gridMinX) * gridWidth
@@ -33,11 +38,11 @@ function Slider2D(props) {
     }
 
     function leftToX(left) {
-        return (left + pointWidth / 2) / gridWidth * (gridMaxX - gridMinX) + gridMinX
+        return (left) / gridWidth * (gridMaxX - gridMinX) + gridMinX
     }
 
     function topToY(top) {
-        return gridMaxY - (top + pointHeight / 2) / gridHeight * (gridMaxY - gridMinY)
+        return gridMaxY - (top) / gridHeight * (gridMaxY - gridMinY)
     }
 
     let gridStyle = {
@@ -47,13 +52,13 @@ function Slider2D(props) {
     }
 
     let pointStyle = {
-        height: pointHeight + "px",
-        width: pointWidth + "px",
+        height: 2 * pointRadius + "px",
+        width: 2 * pointRadius + "px",
         borderRadius: "50%",
         display: "inline-block",
         position: "absolute",
-        left: pointLeft + "px",
-        top: pointTop + "px"
+        left: pointLeft-pointRadius + "px",
+        top: pointTop-pointRadius + "px"
     }
 
     let xaxisStyle = {
@@ -76,7 +81,7 @@ function Slider2D(props) {
     function handlePointMouseDown(e) {
         e.preventDefault();
         document.onmouseup = closeDragElement;
-        document.onmousemove = (e2) => elementDrag(e2, e.nativeEvent.offsetX, e.nativeEvent.offsetY, e.target);
+        document.onmousemove = (e2) => elementDrag(e2, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     }
 
     function closeDragElement() {
@@ -84,48 +89,49 @@ function Slider2D(props) {
         document.onmousemove = null;
     }
 
-    function elementDrag(e, ix, iy, target) {
+    function elementDrag(e, ix, iy) {
         e.preventDefault();
 
-        // calculate the new cursor position:
-        // set the element's new position:
-        let nextLeft = e.target.offsetLeft - ix
-        let nextTop = e.target.offsetTop - iy
+        let nextLeft = e.target.offsetLeft
+        let nextTop = e.target.offsetTop
         if (!e.target.offsetParent) {
             closeDragElement()
             return
         }
+
         if (e.target.offsetParent.className == 'grid') {
-            nextLeft = e.pageX - e.target.offsetParent.offsetLeft - ix
-            nextTop = e.pageY - e.target.offsetParent.offsetTop - iy
+            nextLeft = e.pageX - e.target.offsetParent.offsetLeft
+            nextTop = e.pageY - e.target.offsetParent.offsetTop
         } else {
             nextLeft = e.offsetX - ix
             nextTop = e.offsetY - iy
         }
-        console.log(e)
-        console.log(nextTop)
 
-        if (nextLeft < 0) {
-            nextLeft = 0
+        if (nextLeft < pointRadius) {
+            nextLeft = pointRadius
             closeDragElement()
         }
-        if (nextLeft > gridWidth - pointWidth) {
-            nextLeft = gridWidth - pointWidth
+        if (nextLeft > gridWidth - pointRadius) {
+            nextLeft = gridWidth - pointRadius
             closeDragElement()
         }
-        if (nextTop < 0) {
-            nextTop = 0
+        if (nextTop < pointRadius) {
+            nextTop = pointRadius
             closeDragElement()
         }
-        if (nextTop > gridHeight - pointHeight) {
-            nextTop = gridHeight - pointHeight
+        if (nextTop > gridHeight - pointRadius) {
+            nextTop = gridHeight - pointRadius
             closeDragElement()
         }
-        setPointLeft(nextLeft)
-        setPointTop(nextTop)
         setPointX(leftToX(nextLeft))
         setPointY(topToY(nextTop))
     }
+
+    useEffect(() => {
+        setPointLeft(xToLeft(pointX))
+        setPointTop(yToTop(pointY))
+    }, [pointX, pointY]
+    )
 
 
     return <div className="slider-2d">

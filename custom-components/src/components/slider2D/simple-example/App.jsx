@@ -4,10 +4,14 @@ import './styles.css'
 
 
 function App() {
-
+    let [x, setX] = useState(0)
+    let [y, setY] = useState(0)
     return (
         <div id="minimal-example-slider-2d">
-            <Slider2D />
+            <Slider2D
+                pointX={x} setPointX={setX}
+                pointY={y} setPointY={setY}
+            />
         </div>
     )
 }

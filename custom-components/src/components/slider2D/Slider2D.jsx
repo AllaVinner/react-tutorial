@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 
-function Slider2D(props) {
+function Slider2D({
+    pointX, setPointX,
+    pointY, setPointY,
+    ...props
+}) {
     // Handle props
-    let pointX = props.pointX ? props.pointX : 0.0;
-    let pointY = props.pointY ? props.pointY : 0.0;
-    
-    let setPointX = props.setPointX ? props.setPointX : () => 1;
-    let setPointY = props.setPointY ? props.setPointY : () => 1;
-    
     let gridWidth = props.gridWidth ? props.gridWidth : 500;
     let gridHeight = props.gridHeight ? props.gridHeight : 500;
 
@@ -22,12 +20,9 @@ function Slider2D(props) {
     let axisThickness = props.axisThickness ? props.axisThickness : 1
 
     // Create local Variables
-    let [pointLeft, setPointLeft] = useState(centerPoint(xToLeft(pointX)))
-    let [pointTop, setPointTop] = useState(centerPoint(yToTop(pointY)))
+    let [pointLeft, setPointLeft] = useState(xToLeft(pointX))
+    let [pointTop, setPointTop] = useState(yToTop(pointY))
 
-    function centerPoint(pointPosition) {
-        return pointPosition
-    }
 
     function xToLeft(x) {
         return (x - gridMinX) / (gridMaxX - gridMinX) * gridWidth
@@ -38,11 +33,11 @@ function Slider2D(props) {
     }
 
     function leftToX(left) {
-        return (left) / gridWidth * (gridMaxX - gridMinX) + gridMinX
+        return left / gridWidth * (gridMaxX - gridMinX) + gridMinX
     }
 
     function topToY(top) {
-        return gridMaxY - (top) / gridHeight * (gridMaxY - gridMinY)
+        return gridMaxY - top / gridHeight * (gridMaxY - gridMinY)
     }
 
     let gridStyle = {
@@ -57,8 +52,8 @@ function Slider2D(props) {
         borderRadius: "50%",
         display: "inline-block",
         position: "absolute",
-        left: pointLeft-pointRadius + "px",
-        top: pointTop-pointRadius + "px"
+        left: pointLeft - pointRadius + "px",
+        top: pointTop - pointRadius + "px"
     }
 
     let xaxisStyle = {
@@ -81,7 +76,7 @@ function Slider2D(props) {
     function handlePointMouseDown(e) {
         e.preventDefault();
         document.onmouseup = closeDragElement;
-        document.onmousemove = (e2) => elementDrag(e2, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        document.onmousemove = (e2) => elementDrag(e2);
     }
 
     function closeDragElement() {
@@ -89,7 +84,8 @@ function Slider2D(props) {
         document.onmousemove = null;
     }
 
-    function elementDrag(e, ix, iy) {
+
+    function elementDrag(e) {
         e.preventDefault();
 
         let nextLeft = e.target.offsetLeft
@@ -103,8 +99,8 @@ function Slider2D(props) {
             nextLeft = e.pageX - e.target.offsetParent.offsetLeft
             nextTop = e.pageY - e.target.offsetParent.offsetTop
         } else {
-            nextLeft = e.offsetX - ix
-            nextTop = e.offsetY - iy
+            nextLeft = e.offsetX
+            nextTop = e.offsetY
         }
 
         if (nextLeft < pointRadius) {

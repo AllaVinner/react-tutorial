@@ -18,7 +18,16 @@ function App() {
                 <div>x: {maxX.toFixed(2)}</div>
                 <div>y: {maxY.toFixed(2)}</div>
             </div>
-            <RangeSlider2D setPoint1X={setMinX} setPoint1Y={setMinY} setPoint2X={setMaxX} setPoint2Y={setMaxY} />
+            <RangeSlider2D
+                point1X={minX}
+                point1Y={minY}
+                point2X={maxX}
+                point2Y={maxY}
+                setPoint1X={setMinX}
+                setPoint1Y={setMinY}
+                setPoint2X={setMaxX}
+                setPoint2Y={setMaxY}
+            />
         </div>
     )
 }

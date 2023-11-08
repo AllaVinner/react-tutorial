@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function RangeSlider2D(props) {
-    let setPoint1X = props.setPoint1X ? props.setPoint1X : () => 1;
-    let setPoint1Y = props.setPoint1Y ? props.setPoint1Y : () => 1;
-    let setPoint2X = props.setPoint2X ? props.setPoint2X : () => 1;
-    let setPoint2Y = props.setPoint2Y ? props.setPoint2Y : () => 1;
+function RangeSlider2D({
+    point1X, setPoint1X,
+    point1Y, setPoint1Y,
+    point2X, setPoint2X,
+    point2Y, setPoint2Y,
+    ...props
+}) {
+
     let gridWidth = props.gridWidth ? props.gridWidth : 500;
     let gridHeight = props.gridHeight ? props.gridHeight : 500;
 
@@ -13,20 +16,14 @@ function RangeSlider2D(props) {
     let gridMaxX = props.gridMaxX ? props.gridMaxX : 2.
     let gridMaxY = props.gridMaxY ? props.gridMaxY : 2.
 
-    let pointHeight = props.pointHeight ? props.pointHeight : 20
-    let pointWidth = props.pointWidth ? props.pointWidth : 20
+    let pointRadius = props.pointRadius ? props.pointRadius : 10
     let includeAxis = typeof props.includeAxis == "boolean" ? props.includeAxis : true
     let axisThickness = props.axisThickness ? props.axisThickness : 1
 
-    let initial1X = props.initial1X ? props.initial1X : 0.;
-    let initial1Y = props.initial1Y ? props.initial1Y : 0.;
-    let initial2X = props.initial2X ? props.initial2X : 0.5;
-    let initial2Y = props.initial2Y ? props.initial2Y : 0.5;
-
-    let [point1Left, setPoint1Left] = useState(xToLeft(initial1X) - pointWidth / 2)
-    let [point1Top, setPoint1Top] = useState(yToTop(initial1Y) - pointHeight / 2)
-    let [point2Left, setPoint2Left] = useState(xToLeft(initial2X) - pointWidth / 2)
-    let [point2Top, setPoint2Top] = useState(yToTop(initial2Y) - pointHeight / 2)
+    let [point1Left, setPoint1Left] = useState(xToLeft(point1X))
+    let [point1Top, setPoint1Top] = useState(yToTop(point1Y))
+    let [point2Left, setPoint2Left] = useState(xToLeft(point2X))
+    let [point2Top, setPoint2Top] = useState(yToTop(point2Y))
 
     function xToLeft(x) {
         return (x - gridMinX) / (gridMaxX - gridMinX) * gridWidth
@@ -37,11 +34,11 @@ function RangeSlider2D(props) {
     }
 
     function leftToX(left) {
-        return (left + pointWidth / 2) / gridWidth * (gridMaxX - gridMinX) + gridMinX
+        return left / gridWidth * (gridMaxX - gridMinX) + gridMinX
     }
 
     function topToY(top) {
-        return gridMaxY - (top + pointHeight / 2) / gridHeight * (gridMaxY - gridMinY)
+        return gridMaxY - top / gridHeight * (gridMaxY - gridMinY)
     }
 
     let gridStyle = {
@@ -51,23 +48,23 @@ function RangeSlider2D(props) {
     }
 
     let point1Style = {
-        height: pointHeight + "px",
-        width: pointWidth + "px",
+        height: 2 * pointRadius + "px",
+        width: 2 * pointRadius + "px",
         borderRadius: "50%",
         display: "inline-block",
         position: "absolute",
-        left: point1Left + "px",
-        top: point1Top + "px"
+        left: point1Left - pointRadius + "px",
+        top: point1Top - pointRadius + "px"
     }
 
     let point2Style = {
-        height: pointHeight + "px",
-        width: pointWidth + "px",
+        height: 2 * pointRadius + "px",
+        width: 2 * pointRadius + "px",
         borderRadius: "50%",
         display: "inline-block",
         position: "absolute",
-        left: point2Left + "px",
-        top: point2Top + "px"
+        left: point2Left - pointRadius + "px",
+        top: point2Top - pointRadius + "px"
     }
 
     let xaxisStyle = {
@@ -90,20 +87,20 @@ function RangeSlider2D(props) {
         width: point2Left - point1Left + "px",
         height: point1Top - point2Top + "px",
         position: "absolute",
-        left: point1Left + pointWidth / 2 + "px",
-        top: point2Top + pointHeight / 2 + "px"
+        left: point1Left + "px",
+        top: point2Top + "px"
     }
 
     function handlePointMouseDown1(e) {
         e.preventDefault();
         document.onmouseup = closeDragElement;
-        document.onmousemove = (e2) => elementDrag1(e2, e.nativeEvent.offsetX, e.nativeEvent.offsetY, e.target);
+        document.onmousemove = (e2) => elementDrag1(e2);
     }
 
     function handlePointMouseDown2(e) {
         e.preventDefault();
         document.onmouseup = closeDragElement;
-        document.onmousemove = (e2) => elementDrag2(e2, e.nativeEvent.offsetX, e.nativeEvent.offsetY, e.target);
+        document.onmousemove = (e2) => elementDrag2(e2);
     }
 
 
@@ -112,39 +109,39 @@ function RangeSlider2D(props) {
         document.onmousemove = null;
     }
 
-    function elementDrag1(e, ix, iy, target) {
+    function elementDrag1(e) {
         e.preventDefault();
 
         // calculate the new cursor position:
         // set the element's new position:
-        let nextLeft = e.target.offsetLeft - ix
-        let nextTop = e.target.offsetTop - iy
+        let nextLeft = e.target.offsetLeft
+        let nextTop = e.target.offsetTop
         if (!e.target.offsetParent) {
             closeDragElement()
             return
         }
         if (e.target.offsetParent.className == 'grid') {
-            nextLeft = e.pageX - e.target.offsetParent.offsetLeft - ix
-            nextTop = e.pageY - e.target.offsetParent.offsetTop - iy
+            nextLeft = e.pageX - e.target.offsetParent.offsetLeft
+            nextTop = e.pageY - e.target.offsetParent.offsetTop
         } else {
-            nextLeft = e.offsetX - ix
-            nextTop = e.offsetY - iy
+            nextLeft = e.offsetX
+            nextTop = e.offsetY
         }
 
-        if (nextLeft < 0) {
-            nextLeft = 0
+        if (nextLeft < pointRadius) {
+            nextLeft = pointRadius
             closeDragElement()
         }
-        if (nextLeft > gridWidth - pointWidth) {
-            nextLeft = gridWidth - pointWidth
+        if (nextLeft > gridWidth - pointRadius) {
+            nextLeft = gridWidth - pointRadius
             closeDragElement()
         }
-        if (nextTop < 0) {
-            nextTop = 0
+        if (nextTop < pointRadius) {
+            nextTop = pointRadius
             closeDragElement()
         }
-        if (nextTop > gridHeight - pointHeight) {
-            nextTop = gridHeight - pointHeight
+        if (nextTop > gridHeight - pointRadius) {
+            nextTop = gridHeight - pointRadius
             closeDragElement()
         }
         if (nextTop < point2Top) {
@@ -156,62 +153,71 @@ function RangeSlider2D(props) {
             closeDragElement()
         }
 
-        setPoint1Left(nextLeft)
-        setPoint1Top(nextTop)
         setPoint1X(leftToX(nextLeft))
         setPoint1Y(topToY(nextTop))
     }
 
-    function elementDrag2(e, ix, iy, target) {
+    useEffect(() => {
+        setPoint1Left(xToLeft(point1X))
+        setPoint1Top(yToTop(point1Y))
+    }, [point1X, point1Y]
+    )
+
+
+    function elementDrag2(e) {
         e.preventDefault();
 
         // calculate the new cursor position:
         // set the element's new position:
-        let nextLeft = e.target.offsetLeft - ix
-        let nextTop = e.target.offsetTop - iy
+        let nextLeft = e.target.offsetLeft
+        let nextTop = e.target.offsetTop
         if (!e.target.offsetParent) {
             closeDragElement()
             return
         }
         if (e.target.offsetParent.className == 'grid') {
-            nextLeft = e.pageX - e.target.offsetParent.offsetLeft - ix
-            nextTop = e.pageY - e.target.offsetParent.offsetTop - iy
+            nextLeft = e.pageX - e.target.offsetParent.offsetLeft
+            nextTop = e.pageY - e.target.offsetParent.offsetTop
         } else {
-            nextLeft = e.offsetX - ix
-            nextTop = e.offsetY - iy
+            nextLeft = e.offsetX
+            nextTop = e.offsetY
         }
 
         if (nextLeft < 0) {
             nextLeft = 0
             closeDragElement()
         }
-        if (nextLeft > gridWidth - pointWidth) {
-            nextLeft = gridWidth - pointWidth
+        if (nextLeft > gridWidth - pointRadius) {
+            nextLeft = gridWidth - pointRadius
             closeDragElement()
         }
-        if (nextTop < 0) {
-            nextTop = 0
+        if (nextTop < pointRadius) {
+            nextTop = pointRadius
             closeDragElement()
         }
-        if (nextTop > gridHeight - pointHeight) {
-            nextTop = gridHeight - pointHeight
+        if (nextTop > gridHeight - pointRadius) {
+            nextTop = gridHeight - pointRadius
             closeDragElement()
         }
 
-        if (nextTop > point1Top) {
-            nextTop = point1Top
+        if (nextTop > point1Top - pointRadius) {
+            nextTop = point1Top - pointRadius
             closeDragElement()
         }
-        if (nextLeft < point1Left) {
-            nextLeft = point1Left
+        if (nextLeft < point1Left + pointRadius) {
+            nextLeft = point1Left + pointRadius
             closeDragElement()
         }
-        setPoint2Left(nextLeft)
-        setPoint2Top(nextTop)
         setPoint2X(leftToX(nextLeft))
         setPoint2Y(topToY(nextTop))
     }
 
+    useEffect(() => {
+        console.log("update point 2", point2X)
+        setPoint2Left(xToLeft(point2X))
+        setPoint2Top(yToTop(point2Y))
+    }, [point2X, point2Y]
+    )
 
 
     return <div className="range-slider-2d">
@@ -221,7 +227,6 @@ function RangeSlider2D(props) {
             <div className="box" style={boxStyle}></div>
             <div className="point point-1" style={point1Style} onMouseDown={handlePointMouseDown1}></div>
             <div className="point point-2" style={point2Style} onMouseDown={handlePointMouseDown2}></div>
-
         </div>
     </div>
 }

@@ -14,7 +14,12 @@ function App() {
                 <div>x: {x.toFixed(2)}</div>
                 <div>y: {y.toFixed(2)}</div>
             </div>
-            <Slider2D setPointX={setX} setPointY={setY} />
+            <Slider2D
+                pointX={x}
+                pointY={y}
+                setPointX={setX}
+                setPointY={setY}
+            />
         </div>
     )
 }

@@ -1,0 +1,41 @@
+.switch-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    gap: 10px;
+}
+
+.switch-list > .control-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+
+.select-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0
+}
+
+
+.select-list > button {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 0px;
+}
+
+.select-list > .unchecked {
+    background-color: black;
+    color: antiquewhite;
+}
+
+.select-list>.checked {
+    background-color: antiquewhite;
+    color: black;
+}

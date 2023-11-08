@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 .logo {
     height: 6em;
     padding: 1.5em;
@@ -98,13 +99,43 @@ hr {
 
 .min-point {
     background-color: aqua;
+=======
+.switch-list {
+    background-color: bisque;
+    display: flex;
+    flex-direction: row;
+>>>>>>> 96c766c64e4c4ed0acfb444199cf82339ff29975
 }
 
-.board {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    justify-content: center;
+.select-list {
+    display: flex ;
+    flex-direction: column;
+    background-color: aquamarine;
     align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.control-column {
+    display: flex;
+    flex-direction: column;
+    background-color: aquamarine;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+
+.select-list > button {
+    width: 30px;
+    height: 30px;
+}
+
+.select-list > .unchecked {
+    background-color: white;
+}
+
+.select-list > .checked {
+    background-color: chartreuse;
 }
 

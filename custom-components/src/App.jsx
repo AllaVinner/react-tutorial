@@ -1,20 +1,17 @@
 import './App.css'
 import React, { useState } from "react";
-import Slider2d from './components/slider2D/Slider2D'
-import RangeSlider2d from './components/rangeSlider2D/RangeSlider2D'
+//import ExampleApp from './components/rangeSlider2D/complex-example/App'
+//import ExampleApp from './components/rangeSlider2D/simple-example/App'
+//import ExampleApp from './components/slider2D/complex-example/App'
+//import ExampleApp from './components/slider2D/simple-example/App'
+import ExampleApp from './components/switchList/simple-example/App'
+
+//import RangeSlider2d from './components/rangeSlider2D/RangeSlider2D'
 
 function App() {
-  let [seedReal, setSeedReal] = useState(0)
-  let [seedImag, setSeedImag] = useState(0)
-
-
-  let [minReal, setMinReal] = useState(0)
-  let [minImag, setMinImag] = useState(0)
-
-  let [maxReal, setMaxReal] = useState(0)
-  let [maxImag, setMaxImag] = useState(0)
-
+  
   return (
+<<<<<<< HEAD
     <div className='container'>
       <div className='header'>
         <h1>Julia Fractals With WASM</h1>
@@ -61,6 +58,11 @@ function App() {
 sdfa
       </main>
       </div>
+=======
+    <div>
+      <ExampleApp/>  
+    </div>
+>>>>>>> 96c766c64e4c4ed0acfb444199cf82339ff29975
   )
 }
 

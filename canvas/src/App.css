@@ -40,38 +40,3 @@
 .read-the-docs {
   color: #888;
 }
-
-
-.slider-2d {
-  background-color: gray;
-}
-
-.slider-2d>.grid {
-  background-color: rgba(0, 0, 0, 0.345);
-}
-
-.slider-2d>.grid>.axis {
-  background-color: beige;
-}
-
-.slider-2d>.grid>.point {
-  background-color: aqua;
-}
-
-
-
-.range-slider-2d {
-  background-color: #000000;
-}
-
-.range-slider-2d>.grid>.axis {
-  background-color: beige;
-}
-
-.range-slider-2d>.grid>.box {
-  background-color: #FFFFFF44;
-}
-
-.range-slider-2d>.grid>.point {
-  background-color: gainsboro;
-}
